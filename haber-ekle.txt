@@ -1,0 +1,65 @@
+<?php
+if ($_GET['islem']=="haberekleson")
+ if(isset($_POST['submit']))
+{
+if(get_magic_quotes_gpc())
+{
+    $kat_id = stripslashes($_POST['kat_id']);
+    $baslik = stripslashes($_POST['baslik']);
+	$baslik_renk = stripslashes($_POST['baslik_renk']);
+    $yer = stripslashes($_POST['yer']);
+    $resim1 = stripslashes($_POST['resim1']);
+	$resim2 = stripslashes($_POST['resim2']);
+    $spot = stripslashes($_POST['spot']);
+    $fullmetin = stripslashes($_POST['fullmetin']);
+
+}
+else
+{
+    $kat_id = stripslashes($_POST['kat_id']);
+    $baslik = stripslashes($_POST['baslik']);
+	$baslik_renk = stripslashes($_POST['baslik_renk']);
+    $yer = stripslashes($_POST['yer']);
+    $resim1 = stripslashes($_POST['resim1']);
+	$resim2 = stripslashes($_POST['resim2']);
+    $spot = stripslashes($_POST['spot']);
+    $fullmetin = stripslashes($_POST['fullmetin']);
+
+}
+//*****************************
+//*****************************
+$kat_id = mysql_real_escape_string($kat_id);
+$baslik = mysql_real_escape_string($baslik);
+$baslik_renk = mysql_real_escape_string($baslik_renk);
+$yer = mysql_real_escape_string($yer);
+$resim1 = mysql_real_escape_string($resim1);
+$resim2 = mysql_real_escape_string($resim2);
+$spot = mysql_real_escape_string($spot);
+$fullmetin = mysql_real_escape_string($fullmetin);
+
+$query = "INSERT INTO haberler (id, kat_id, baslik, baslik_renk, yer, resim1, resim2, spot, fullmetin, tarih,saat)
+VALUES ('' , '$kat_id', '$baslik','$baslik_renk', '$yer', '$resim1', '$resim2', '$spot','$fullmetin', NOW(),NOW())";
+if(mysql_query($query)) {
+$rand =substr(md5(uniqid(rand())),0,5);  
+ $resim1=url_cevir($_FILES['resim1']['name']);
+  $resim2=url_cevir($_FILES['resim2']['name']);
+        if (is_uploaded_file($_FILES['resim1']['tmp_name']))
+		if (is_uploaded_file($_FILES['resim2']['tmp_name'])) {
+            if(move_uploaded_file($_FILES['resim1']['tmp_name'],"../images/haber_resim/".$rand.$resim1))
+			if(move_uploaded_file($_FILES['resim2']['tmp_name'],"../images/haber_resim/".$rand.$resim2))
+			
+			{
+			
+            }else{
+                echo "hata oldu";
+            }
+        }
+        $update_id = mysql_insert_id();		
+
+        $resim11 = "images/haber_resim/".$rand.$resim1;
+		$resim22 = "images/haber_resim/".$rand.$resim2;
+        mysql_query("update haberler set resim1='$resim11',resim2='$resim22' where id=$update_id");
+    } else {
+       echo 'Hata olu?tu'.mysql_error();
+    }
+}?>
