@@ -26,8 +26,8 @@ else
     $fullmetin = stripslashes($_POST['fullmetin']);
 
 }
-//*****************************
-//*****************************
+//******************************
+//******************************
 $kat_id = mysql_real_escape_string($kat_id);
 $baslik = mysql_real_escape_string($baslik);
 $baslik_renk = mysql_real_escape_string($baslik_renk);
